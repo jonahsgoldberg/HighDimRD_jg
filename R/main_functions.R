@@ -151,7 +151,7 @@ HighDim_rd <- function(Y,X,Z,c=0,rd="robust",level=0.95,b=NULL,bfactor=1,h=NULL,
       bout <- rdrobust::rdbwselect(Y,X,c=c,bwselect="mserd",kernel=kernel)
       b <- bout$bws[1]
     } else {
-      bout <- RDHonest::RDHonest(Y~X,cutoff=c,M=C,kern=kernel,opt.criterion="FLCI",alpha=1-level,sclass=sclass)
+      bout <- RDHonest::RDHonest(Y~X,cutoff=c,M=C,kern=kernel,opt.criterion="MSE",alpha=1-level,sclass=sclass)
       b <- bout$coefficients$bandwidth
     }
   }
@@ -223,7 +223,7 @@ HighDim_rd <- function(Y,X,Z,c=0,rd="robust",level=0.95,b=NULL,bfactor=1,h=NULL,
         Sigma <- solve(Sigma22)%*%Sigma21
         Ytilde <- Y-Z[,sig_cov]%*%Sigma
 
-        hout <- RDHonest::RDHonest(Ytilde~X,cutoff=c,M=C,kern=kernel,opt.criterion="FLCI",alpha=1-level,sclass=sclass)
+        hout <- RDHonest::RDHonest(Ytilde~X,cutoff=c,M=C,kern=kernel,opt.criterion="MSE",alpha=1-level,sclass=sclass)
         h <- hout$coefficients$bandwidth
       }
     }
@@ -234,13 +234,13 @@ HighDim_rd <- function(Y,X,Z,c=0,rd="robust",level=0.95,b=NULL,bfactor=1,h=NULL,
     if(rd=="robust") {
       RDfit <- rdrobust::rdrobust(Y,X,c=c,h=h,b=h,kernel=kernel,level=level*100)
     } else {
-      RDfit <- RDHonest::RDHonest(Y~X,cutoff=c,M=C,kern=kernel,opt.criterion="FLCI",h=h,alpha=1-level,sclass=sclass)
+      RDfit <- RDHonest::RDHonest(Y~X,cutoff=c,M=C,kern=kernel,opt.criterion="MSE",h=h,alpha=1-level,sclass=sclass)
     }
   } else {
     if(rd=="robust") {
       RDfit <- rdrobust::rdrobust(Y,X,c=c,h=h,b=h,covs=Z[,sig_cov],kernel=kernel,level=level*100)
     } else {
-      RDfit <- RDHonest::RDHonest(Ytilde~X,cutoff=c,M=C,kern=kernel,opt.criterion="FLCI",h=h,alpha=1-level,sclass=sclass)
+      RDfit <- RDHonest::RDHonest(Ytilde~X,cutoff=c,M=C,kern=kernel,opt.criterion="MSE",h=h,alpha=1-level,sclass=sclass)
     }
   }
 
