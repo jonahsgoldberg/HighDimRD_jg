@@ -175,7 +175,7 @@ HighDim_rd <- function(Y,X,Z,c=0,rd="robust",level=0.95,b=NULL,bfactor=1,h=NULL,
   ## Regress Covariates on Outcome weighted by the kernel
   if(tpc=="CV") {
     ## Do Cross-Validation
-    mod <- glmnet::cv.glmnet(cbind(Tmod,Xmod,TXmod,Zmod),Ymod,alpha=1,weights=kernel_factor[relevant_indices],standardize=FALSE,nfolds=20,nlambda=500)
+    mod <- glmnet::cv.glmnet(cbind(Tmod,Xmod,TXmod,Zmod),Ymod,alpha=1,weights=kernel_factor[relevant_indices],penalty.factor=c(rep(0,3),sqrt(w)),standardize=FALSE,nfolds=20,nlambda=500)
     est <- coef(mod)
     Z_pars <- est[5:(4+p)] # Recall that there is the intercept
     theta_tilde <- est[1:4]
